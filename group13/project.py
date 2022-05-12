@@ -83,13 +83,9 @@ def query(stock : str, corr_level : int) -> list:
             if i != stock: # non self-edges
                 adjacency_list[stock].append(i)
     if corr_level == 1:
-        if adjacency_list[stock] != None:
-            adjacency_list[stock] = qsort(adjacency_list[stock])
-            return adjacency_list[stock]
-        else:
-            return ['1']
-
-    if corr_level == 2:
+        adjacency_list[stock] = qsort(adjacency_list[stock])
+        return adjacency_list[stock]
+    elif corr_level == 2:
         adjacency_list2 = {}
         adjacency_list2[stock] = []
         for j in adjacency_list[stock]:
@@ -99,11 +95,10 @@ def query(stock : str, corr_level : int) -> list:
                     if i not in adjacency_list2[stock]:
                         adjacency_list2[stock].append(i)
         adjacency_list2[stock] = qsort(adjacency_list2[stock])
-        if adjacency_list2[stock] != None:
-            return adjacency_list2[stock]
-        else:
-            return ['1']
-#    return []
+        return adjacency_list2[stock]
+    else:
+        return []
+
 
 class Graph():
     """ A data structure for Graph """
