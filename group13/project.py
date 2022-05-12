@@ -5,7 +5,7 @@ import gplot
 from matplotlib import pyplot as plt
 import random 
 from email import utils
-from utils import Graph
+#from utils import Graph
 
 new_container = {}
 adjacency_list = {}
@@ -44,7 +44,11 @@ def prepare(filename : str, threshold : float):
     global t
     t = threshold
 
-    return new_container
+def qsort(arr):
+    if len(arr) <= 1:
+        return arr
+    else:
+        return qsort([x for x in arr[1:] if x < arr[0]]) + [arr[0]] + qsort([x for x in arr[1:] if x >= arr[0]])
 
 def query(stock : str, corr_level : int) -> list:
     """
@@ -78,6 +82,12 @@ def query(stock : str, corr_level : int) -> list:
         if abs(new_container[i] - centre) < t:
             if i != stock: # non self-edges
                 adjacency_list[stock].append(i)
+    if corr_level == 1:
+        if adjacency_list[stock] != None:
+            adjacency_list[stock] = qsort(adjacency_list[stock])
+            return adjacency_list[stock]
+        else:
+            return ['1']
 
     if corr_level == 2:
         adjacency_list2 = {}
@@ -85,14 +95,28 @@ def query(stock : str, corr_level : int) -> list:
         for j in adjacency_list[stock]:
             for i in new_container:
                 if abs(new_container[j]-new_container[i]) < t and i != stock and i not in adjacency_list[stock]:
-                    print(str(j)+' '+str(i)+' '+str(abs(new_container[j]-new_container[i])))
+#                    print(str(j)+' '+str(i)+' '+str(abs(new_container[j]-new_container[i])))
                     if i not in adjacency_list2[stock]:
                         adjacency_list2[stock].append(i)
-
-    print(adjacency_list)
-    return adjacency_list2
-
+        adjacency_list2[stock] = qsort(adjacency_list2[stock])
+        if adjacency_list2[stock] != None:
+            return adjacency_list2[stock]
+        else:
+            return ['1']
 #    return []
+
+class Graph():
+    """ A data structure for Graph """
+
+    def __init__(self, adjacency_list):
+        self.adjacency_list = adjacency_list
+        
+    def edges(self):
+        all_edges = []
+        for key, adj_nodes in self.adjacency_list.items():
+            all_edges += [(key, adj_node) for adj_node in adj_nodes]
+        return all_edges 
+
 
 # Optional!
 def num_connected_components() -> int:
@@ -110,41 +134,15 @@ def num_connected_components() -> int:
 
 # Some code to test your approach (if you need)
 if __name__ == "__main__":
-    print(prepare("small_dataset2.txt", 0.05))
-    res = query("AAPL", corr_level = 2) 
+    prepare("small_dataset2.txt", 0.04)
+    res = query("AAPL", 2) 
     # It should return ['CHTR', 'VRTX']
     print(res)
+    print(query("GOOGL", 1))
     ncc = num_connected_components()
     # It should return 9 
 #    print(ncc)
     mygraph = Graph(adjacency_list)
     edges = mygraph.edges()
     # plot example of graph
-    gplot.plot_graph(edges)
-    
-'''
-pip install matplotlib
-pip install networkx
-pip install pydot
-pip install graphviz / conda install graphviz
-'''
-
-# DATA STRUCTURE
-
-# sufficient
-'''
-{'AAPL': [(371.0, 200.0), (369.0, 197.0), (370.0, 200.0), 
-(365.0, 191.0), (366.0, 194.0), (367.0, 195.0), (368.0, 196.0)], 
-'TSLA': [(369.0, 275.0), (370.0, 273.0), (371.0, 273.0), 
-(365.0, 289.0), (366.0, 286.0), (367.0, 292.0), (368.0, 268.0)]}
-'''
-
-# complete
-'''
-{'AAPL': [(730.0, 200.0, 0.0), (369.0, 197.0, 18526600.0), 
-(370.0, 200.0, 0.0), (365.0, 191.0, 27862000.0), 
-(366.0, 194.0, 22765700.0), (367.0, 195.0, 23271800.0), (368.0, 196.0, 19114300.0)], 
-'TSLA': [(369.0, 275.0, 13038300.0), (370.0, 273.0, 0.0), 
-(730.0, 273.0, 0.0), (365.0, 289.0, 8110400.0), 
-(366.0, 286.0, 5478900.0), (367.0, 292.0, 7929900.0), (368.0, 268.0, 23720700.0)]}
-'''
+#    gplot.plot_graph(edges)
