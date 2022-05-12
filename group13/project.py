@@ -1,3 +1,9 @@
+from math import expm1
+from platform import node
+import gplot
+#from collections import queue
+from matplotlib import pyplot as plt
+import random 
 from email import utils
 from utils import Graph
 
@@ -110,6 +116,10 @@ if __name__ == "__main__":
     ncc = num_connected_components()
     # It should return 9 
 #    print(ncc)
+    mygraph = Graph(adjacency_list)
+    edges = mygraph.edges()
+    # plot example of graph
+    gplot.plot_graph(edges)
     
 '''
 pip install matplotlib
