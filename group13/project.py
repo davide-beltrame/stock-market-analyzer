@@ -1,23 +1,20 @@
-from math import expm1
-from platform import node
+#from math import expm1
+#from platform import node
 import gplot
 #from collections import queue
-from matplotlib import pyplot as plt
-import random 
-import group13.utils
-from group13.utils import Graph, qsort
+#from matplotlib import pyplot as plt
+try: # this is for running main.py
+    import group13.utils
+    from group13.utils import Graph, qsort, bfs
+except: # this is for running directly project.py (for testing)
+    import utils
+    from utils import Graph, qsort, bfs
 
 new_container = {}
 adjacency_list = {}
 
 def prepare(filename : str, threshold : float):
-    """ The method is responsable to create the needed data structures to 
-        answer the queries. 
 
-    Args:
-        filename (str): the input file with the dataset
-        threshold (float): a special threshold used to compute the correlation between stocks. 
-    """
     stock_container = {}
     global new_container
 
@@ -39,56 +36,42 @@ def prepare(filename : str, threshold : float):
         else:
             new_container[stock] = 1
 
-    #CORRELATION TEST
+    global adjacency_list
     global t
     t = threshold
+    for stock in new_container:
+        root = new_container[stock] 
+        adjacency_list[stock] = []
+        for i in new_container:
+            if abs(new_container[i] - root) < t:
+                if i != stock: # non self-edges
+                    adjacency_list[stock].append(i)
 
 def query(stock : str, corr_level : int) -> list:
-    """
-    Some stocks can be correlated and have a similar behavior.
-
-    This method aims at finding all the correlated stocks respect to the input stock.
-    In particular we define the corr_level as follows:
-        corr_level = 1 identify all the stocks that are directly correlated to the input stock.
-        corr_level = 2 identify all the stocks that are NOT directly correlated to the input stock, but they are correlated through a stock at corr_level = 1. 
-        corr_level = 3 identify all the stocks that are NOT directly correlated to the input stock, but they are correlated through a stock at corr_level = 2. 
-        ..
-        corr_level = i identify all the stocks that are NOT directly correlated to the input stock, but they are correlated through a stock at corr_level = i-1. 
-    
-    Returns:
-        list: a list of correlated stocks at corr_level. The list should be in an alphabetical order. If the stock has not correlated stocks, the output should be an empty list.
-
-    E.g., :
-        The execution query(GOOGL, 4) may returns: ['AMZN', 'FISV', 'XEL'] 
-        Notice the output is ordered!
-    """
 
 #    for stock in dict(new_container): # the dict() here prevents: RuntimeError: dictionary changed size during iteration
 #        if abs(new_container[stock]) >= t:
 #            new_container.pop(stock)
-    global adjacency_list
 
-    centre = new_container[stock] 
-
-    adjacency_list[stock] = []
-    for i in new_container:
-        if abs(new_container[i] - centre) < t:
-            if i != stock: # non self-edges
-                adjacency_list[stock].append(i)
     if corr_level == 1:
         adjacency_list[stock] = qsort(adjacency_list[stock])
         return adjacency_list[stock]
     elif corr_level == 2:
-        adjacency_list2 = {}
-        adjacency_list2[stock] = []
+        for x in adjacency_list[stock]:
+            adjacency_list[x] = []
         for j in adjacency_list[stock]:
             for i in new_container:
                 if abs(new_container[j]-new_container[i]) < t and i != stock and i not in adjacency_list[stock]:
 #                    print(str(j)+' '+str(i)+' '+str(abs(new_container[j]-new_container[i])))
-                    if i not in adjacency_list2[stock]:
-                        adjacency_list2[stock].append(i)
-        adjacency_list2[stock] = qsort(adjacency_list2[stock])
-        return adjacency_list2[stock]
+                    if i not in adjacency_list[stock]:
+                        adjacency_list[j].append(i)
+        output = []
+        for j in adjacency_list[stock]:
+            for k in adjacency_list[j]:
+                if k not in output:
+                    output.append(k)    
+        output = qsort(output)
+        return output       
     else:
         return []
 
@@ -107,17 +90,17 @@ def num_connected_components() -> int:
     # TODO: implement here your approach
     return -1   
 
-# Some code to test your approach (if you need)
 if __name__ == "__main__":
     prepare("small_dataset2.txt", 0.04)
     res = query("AAPL", 2) 
     # It should return ['CHTR', 'VRTX']
     print(res)
-    print(query("GOOGL", 1))
+#    print(query("GOOGL", 1))
     ncc = num_connected_components()
     # It should return 9 
 #    print(ncc)
     mygraph = Graph(adjacency_list)
     edges = mygraph.edges()
     # plot example of graph
-#    gplot.plot_graph(edges)
+    gplot.plot_graph(edges)
+#    bfs([], adjacency_list, 'g')
