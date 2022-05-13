@@ -35,8 +35,7 @@ def prepare(filename : str, threshold : float):
     for stock in stock_container:
         init_price, final_price = stock_container[stock][0], stock_container[stock][1]
         if init_price > 0:
-            return_var = (final_price-init_price)/init_price
-            new_container[stock] = return_var
+            new_container[stock] = (final_price-init_price)/init_price
         else:
             new_container[stock] = 1
 
