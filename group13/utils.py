@@ -23,8 +23,9 @@ def qsort(arr):
 import queue
  
 queue = []
+visited = []
 
-def bfs(visited, graph, node):
+def bfs_exercise(visited, graph, node):
     # NOTE: this is not the full BFS algorithm,
     # it is just a sketch to show the queue execution
     visited.append(node)
@@ -42,6 +43,9 @@ def bfs(visited, graph, node):
                 visited.append(neighbour)
                 queue.append(neighbour)
 
+def bfs(node):
+    visited.append(node)
+    queue.append(node)
 
 
 # Utility bfs method to fill distance
