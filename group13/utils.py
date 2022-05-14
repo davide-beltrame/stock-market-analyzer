@@ -21,32 +21,8 @@ def qsort(arr):
         return qsort([x for x in arr[1:] if x < arr[0]]) + [arr[0]] + qsort([x for x in arr[1:] if x >= arr[0]])
 
 import queue
- 
+
 queue = []
-visited = []
-
-def bfs_exercise(visited, graph, node):
-    # NOTE: this is not the full BFS algorithm,
-    # it is just a sketch to show the queue execution
-    visited.append(node)
-    queue.append(node)
-
-    while queue:
-        print("Queue:", queue)
-        s = queue.pop(0) 
-
-        print("Extract: ", s) 
-        print("Neighbours:", graph[s])
-        print("--")
-        for neighbour in graph[s]:
-            if neighbour not in visited:
-                visited.append(neighbour)
-                queue.append(neighbour)
-
-def bfs(node):
-    visited.append(node)
-    queue.append(node)
-
 
 # Utility bfs method to fill distance
 # vector and returns most distant
@@ -137,3 +113,40 @@ def nodesKDistanceFromMarked(edges, V, marked, N, K):
         if (dl[i] <= K and dr[i] <= K):
             res += 1
     return res
+
+if __name__ == '__main__':
+ 
+    edges = [[1, 0], [0, 3], [0, 8],
+             [2, 3], [3, 5], [3, 6],
+             [3, 7], [4, 5], [5, 9]]
+    V = len(edges)
+     
+    marked = [1, 2, 4]
+    N = len(marked)
+ 
+    K = 3
+    print(nodesKDistanceFromMarked(edges, V,
+                                   marked, N, K))
+
+
+'''def bfs_exercise(visited, graph, node):
+    # NOTE: this is not the full BFS algorithm,
+    # it is just a sketch to show the queue execution
+    visited.append(node)
+    queue.append(node)
+
+    while queue:
+        print("Queue:", queue)
+        s = queue.pop(0) 
+
+        print("Extract: ", s) 
+        print("Neighbours:", graph[s])
+        print("--")
+        for neighbour in graph[s]:
+            if neighbour not in visited:
+                visited.append(neighbour)
+                queue.append(neighbour)
+
+def bfs(node):
+    visited.append(node)
+    queue.append(node)'''
