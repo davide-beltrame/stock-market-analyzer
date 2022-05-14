@@ -1,6 +1,5 @@
-# Use this file to implement your own utils
+from functools import lru_cache
 
-##### HERE YOU CAN ADD YOUR UTILITY FUNCTIONS / OBJECT / CLASSES #####
 
 class Graph():
     """ A data structure for Graph """
@@ -44,6 +43,8 @@ def bfs(graph, node, corr_level): #function for BFS
                 queue.append(neighbour)
         if graph[m] != [] and m in marked:
             l += 1
+        for i in range(l,11):
+                lvl_container[i] = []
         if l > corr_level:
             break
     return lvl_container[corr_level]

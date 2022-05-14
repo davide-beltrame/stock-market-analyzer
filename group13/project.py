@@ -1,6 +1,7 @@
 #from math import expm1
 #from platform import node
 import gplot
+from functools import lru_cache
 #from collections import queue
 #from matplotlib import pyplot as plt
 try: # this is for running main.py
@@ -12,6 +13,7 @@ except: # this is for running directly project.py (for testing)
 
 from queue import Queue
 
+@lru_cache()
 def prepare(filename : str, threshold : float):
 
     global new_container
@@ -45,7 +47,6 @@ def prepare(filename : str, threshold : float):
             if abs(new_container[i] - root) < threshold:
                 if i != stock: # non self-edges
                     adjacency_list[stock].append(i)
-
 
 def query(stock : str, corr_level : int) -> list:
 
@@ -106,10 +107,10 @@ if __name__ == "__main__":
 
     print(tester(0.04, "GOOGL", 1))
     print(tester(0.04, "GOOGL", 4))
-#    print(tester(0.04, "AAPL", 1))
-#    print(tester(0.04, "AAPL", 2))
-#    print(tester(0.04, "AAPL", 4))
-#    print(tester(0.08, "AAPL", 2))
+    print(tester(0.04, "AAPL", 1))
+    print(tester(0.04, "AAPL", 2))
+    print(tester(0.04, "AAPL", 4))
+    print(tester(0.08, "AAPL", 2))
 
     ncc = num_connected_components()
     # It should return 9 
