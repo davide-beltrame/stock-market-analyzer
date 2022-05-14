@@ -78,35 +78,6 @@ def query(stock : str, corr_level : int) -> list:
     else:
         return []
     
-#breadth first search
-
-visited = {}
-level = {} #distance dict
-parent = {}
-bfs_traversal = []
-queue = Queue()
-
-for node in adjacency_list.keys():
-    visited[node] = False
-    parent[node] = None
-    level[node] = -1
-
-#s = stock
-visited[s] = True
-level[s] = 0
-queue.put(s)
-
-while not queue.empty():
-    u = queue.get()
-    bfs_traversal.append(u)
-
-    for v in adjacency_list[u]:
-        if not visited[v]:
-            visited[v] = True
-            parent[v] = u
-            level[v] = level[u] + 1
-            queue.put(v)
-
 
 
 # Optional!
