@@ -12,13 +12,13 @@ except: # this is for running directly project.py (for testing)
 
 from queue import Queue
 
-new_container = {}
-adjacency_list = {}
-
 def prepare(filename : str, threshold : float):
 
-    stock_container = {}
     global new_container
+    global adjacency_list
+    stock_container = {}
+    new_container = {}
+    adjacency_list = {} 
 
     with open(filename,'r') as f:
         for line in f:
@@ -38,19 +38,19 @@ def prepare(filename : str, threshold : float):
         else:
             new_container[stock] = 1
 
-    global adjacency_list
-    global t
-    t = threshold
     for stock in new_container:
         root = new_container[stock] 
         adjacency_list[stock] = []
         for i in new_container:
-            if abs(new_container[i] - root) < t:
+            if abs(new_container[i] - root) < threshold:
                 if i != stock: # non self-edges
                     adjacency_list[stock].append(i)
 
 
 def query(stock : str, corr_level : int) -> list:
+
+    ''' OLD BRUTE-FORCE CODE
+
 
 #    for stock in dict(new_container): # the dict() here prevents: RuntimeError: dictionary changed size during iteration
 #        if abs(new_container[stock]) >= t:
@@ -77,7 +77,10 @@ def query(stock : str, corr_level : int) -> list:
         return output       
     else:
         return []
-    
+    '''
+
+    return qsort(bfs(adjacency_list, stock, corr_level))
+
 
 
 # Optional!
@@ -94,12 +97,20 @@ def num_connected_components() -> int:
     # TODO: implement here your approach
     return -1   
 
+def tester(t, s, c):
+    prepare("small_dataset2.txt", t)
+    return query(s,c)
+
+
 if __name__ == "__main__":
-    prepare("small_dataset2.txt", 0.04)
-    res = query("AAPL", 2) 
-    # It should return ['CHTR', 'VRTX']
-    print(res)
-#    print(query("GOOGL", 1))
+
+    print(tester(0.04, "GOOGL", 1))
+    print(tester(0.04, "GOOGL", 4))
+#    print(tester(0.04, "AAPL", 1))
+#    print(tester(0.04, "AAPL", 2))
+#    print(tester(0.04, "AAPL", 4))
+#    print(tester(0.08, "AAPL", 2))
+
     ncc = num_connected_components()
     # It should return 9 
 #    print(ncc)
@@ -107,6 +118,6 @@ if __name__ == "__main__":
     edges = mygraph.edges()
     # plot example of graph
     # Driver Code
-    bfs(adjacency_list, 'AAPL')    # function calling
-    gplot.plot_graph(edges)
+#    print(bfs(adjacency_list, 'AAPL', 2))   # function calling
+#    gplot.plot_graph(edges)
 #    bfs([], adjacency_list, 'g')

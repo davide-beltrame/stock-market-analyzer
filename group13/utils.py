@@ -22,6 +22,33 @@ def qsort(arr):
 
 import queue
 
+def bfs(graph, node, corr_level): #function for BFS
+#    print('BFS of adjacency list with root: {}'.format(node))
+    queue = []     #Initialize a queue
+    visited = []
+    lvl_container = {}
+    marked = []
+    visited.append(node)
+    queue.append(node)
+    l = 1
+    while queue:        # Creating loop to visit each node
+        m = queue.pop(0) 
+        lvl_container[l] = []
+        for neighbour in graph[m]:
+            if neighbour not in visited:
+                if m not in marked:
+                    marked.append(m)
+#                print(str(m)+' has neighbour: '+str(neighbour)+' (level: {}) '.format(l))
+                lvl_container[l].append(neighbour)
+                visited.append(neighbour)
+                queue.append(neighbour)
+        if graph[m] != [] and m in marked:
+            l += 1
+        if l > corr_level:
+            break
+    return lvl_container[corr_level]
+
+'''
 def bfs_old(s):
     marked = []
     q = queue.Queue()
@@ -30,31 +57,6 @@ def bfs_old(s):
     while q != []:
         print(q)
         break
-
-queue = []     #Initialize a queue
-visited = []
-
-def bfs(graph, node): #function for BFS
-    marked = []
-    visited.append(node)
-    queue.append(node)
-    l = 1
-    while queue:        # Creating loop to visit each node
-        m = queue.pop(0) 
-        for neighbour in graph[m]:
-            if neighbour not in visited:
-                if m not in marked:
-                    marked.append(m)
-                print(str(m)+' has neighbour: '+str(neighbour)+' (level: {}) '.format(l))
-                visited.append(neighbour)
-                queue.append(neighbour)
-        if graph[m] != [] and m in marked:
-            l += 1
-
-if __name__ == '__main__':
-    bfs('AAPL')
-
-
 # Utility bfs method to fill distance
 # vector and returns most distant
 # marked node from node u
@@ -160,7 +162,7 @@ if __name__ == '__main__':
                                    marked, N, K))
 
 
-'''def bfs_exercise(visited, graph, node):
+def bfs_exercise(visited, graph, node):
     # NOTE: this is not the full BFS algorithm,
     # it is just a sketch to show the queue execution
     visited.append(node)
