@@ -22,7 +22,38 @@ def qsort(arr):
 
 import queue
 
-queue = []
+def bfs_old(s):
+    marked = []
+    q = queue.Queue()
+    marked.append(s)
+    q.put(s)
+    while q != []:
+        print(q)
+        break
+
+queue = []     #Initialize a queue
+visited = []
+
+def bfs(graph, node): #function for BFS
+    marked = []
+    visited.append(node)
+    queue.append(node)
+    l = 1
+    while queue:        # Creating loop to visit each node
+        m = queue.pop(0) 
+        for neighbour in graph[m]:
+            if neighbour not in visited:
+                if m not in marked:
+                    marked.append(m)
+                print(str(m)+' has neighbour: '+str(neighbour)+' (level: {}) '.format(l))
+                visited.append(neighbour)
+                queue.append(neighbour)
+        if graph[m] != [] and m in marked:
+            l += 1
+
+if __name__ == '__main__':
+    bfs('AAPL')
+
 
 # Utility bfs method to fill distance
 # vector and returns most distant

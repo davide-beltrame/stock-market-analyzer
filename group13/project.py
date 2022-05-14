@@ -106,5 +106,7 @@ if __name__ == "__main__":
     mygraph = Graph(adjacency_list)
     edges = mygraph.edges()
     # plot example of graph
+    # Driver Code
+    bfs(adjacency_list, 'AAPL')    # function calling
     gplot.plot_graph(edges)
 #    bfs([], adjacency_list, 'g')
