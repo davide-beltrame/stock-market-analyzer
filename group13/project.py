@@ -10,6 +10,8 @@ except: # this is for running directly project.py (for testing)
     import utils
     from utils import Graph, qsort, bfs
 
+from queue import Queue
+
 new_container = {}
 adjacency_list = {}
 
@@ -47,6 +49,7 @@ def prepare(filename : str, threshold : float):
                 if i != stock: # non self-edges
                     adjacency_list[stock].append(i)
 
+
 def query(stock : str, corr_level : int) -> list:
 
 #    for stock in dict(new_container): # the dict() here prevents: RuntimeError: dictionary changed size during iteration
@@ -74,6 +77,36 @@ def query(stock : str, corr_level : int) -> list:
         return output       
     else:
         return []
+    
+#breadth first search
+
+visited = {}
+level = {} #distance dict
+parent = {}
+bfs_traversal = []
+queue = Queue()
+
+for node in adjacency_list.keys():
+    visited[node] = False
+    parent[node] = None
+    level[node] = -1
+
+#s = stock
+visited[s] = True
+level[s] = 0
+queue.put(s)
+
+while not queue.empty():
+    u = queue.get()
+    bfs_traversal.append(u)
+
+    for v in adjacency_list[u]:
+        if not visited[v]:
+            visited[v] = True
+            parent[v] = u
+            level[v] = level[u] + 1
+            queue.put(v)
+
 
 
 # Optional!
