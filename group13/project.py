@@ -13,14 +13,24 @@ except: # this is for running directly project.py (for testing)
 
 from queue import Queue
 
+new_container = {}
+adjacency_list = {} 
+last_container = {}
+
+STOCKS_TO_TEST = ['AVGO', 'TMUS', 'QCOM', 'ROST', 'ISRG', 'ORLY', 'SBUX', 'MU',
+       'LRCX', 'CMCSA', 'GOOGL', 'ATVI', 'COST', 'CSCO', 'NVDA', 'AMZN',
+       'PYPL', 'TXN', 'INTC', 'GILD', 'AAPL', 'CTSH', 'VRTX', 'REGN',
+       'ADI', 'FISV', 'BIIB', 'KHC', 'MSFT', 'AMD', 'INTU', 'AMAT',
+       'CHTR', 'FB', 'ILMN', 'PEP', 'MDLZ', 'NFLX', 'AMGN', 'ADBE', 'WBA',
+       'EBAY', 'ADP', 'CSX', 'MAR', 'BKNG', 'TSLA', 'XEL', 'NXPI']
+
 @lru_cache()
 def prepare(filename : str, threshold : float):
 
     global new_container
     global adjacency_list
+    global last_container
     stock_container = {}
-    new_container = {}
-    adjacency_list = {} 
 
     with open(filename,'r') as f:
         for line in f:
@@ -47,6 +57,10 @@ def prepare(filename : str, threshold : float):
             if abs(new_container[i] - root) < threshold:
                 if i != stock: # non self-edges
                     adjacency_list[stock].append(i)
+
+    for stock in STOCKS_TO_TEST:
+        last_container[stock] = bfs(adjacency_list, stock)
+#    print(last_container)
 
 def query(stock : str, corr_level : int) -> list:
 
@@ -80,7 +94,9 @@ def query(stock : str, corr_level : int) -> list:
         return []
     '''
 
-    return qsort(bfs(adjacency_list, stock, corr_level))
+    #return qsort(bfs(adjacency_list, stock, corr_level))
+    return last_container[stock][corr_level]
+    #return last_container[stock][corr_level-1]
 
 
 
@@ -98,19 +114,29 @@ def num_connected_components() -> int:
     # TODO: implement here your approach
     return -1   
 
+dataset = "small_dataset2.txt"
+
 def tester(t, s, c):
-    prepare("small_dataset2.txt", t)
+    prepare(dataset, t)
     return query(s,c)
 
 
 if __name__ == "__main__":
 
-    print(tester(0.04, "GOOGL", 1))
-    print(tester(0.04, "GOOGL", 4))
-    print(tester(0.04, "AAPL", 1))
-    print(tester(0.04, "AAPL", 2))
-    print(tester(0.04, "AAPL", 4))
-    print(tester(0.08, "AAPL", 2))
+    if dataset == "small_dataset2.txt":
+        print(tester(0.04, "GOOGL", 1))
+        print(tester(0.04, "GOOGL", 4))
+        print(tester(0.04, "AAPL", 1))
+        print(tester(0.04, "AAPL", 2))
+        print(tester(0.04, "AAPL", 4))
+        print(tester(0.08, "AAPL", 2))
+    elif dataset == "medium_dataset2.txt":
+#        print(prepare(dataset,0.06))
+        print(tester(0.06, "AAPL", 2))
+        print(tester(0.1, "TSLA", 5))
+    elif dataset == "large_dataset2.txt":
+        print(prepare(dataset,0.05))
+#        print(tester)
 
     ncc = num_connected_components()
     # It should return 9 

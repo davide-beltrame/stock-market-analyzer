@@ -21,7 +21,7 @@ def qsort(arr):
 
 import queue
 
-def bfs(graph, node, corr_level): #function for BFS
+def bfs(graph, node): #function for BFS
 #    print('BFS of adjacency list with root: {}'.format(node))
     queue = []     #Initialize a queue
     visited = []
@@ -39,15 +39,16 @@ def bfs(graph, node, corr_level): #function for BFS
                     marked.append(m)
 #                print(str(m)+' has neighbour: '+str(neighbour)+' (level: {}) '.format(l))
                 lvl_container[l].append(neighbour)
+                lvl_container[l] = qsort(lvl_container[l])
                 visited.append(neighbour)
                 queue.append(neighbour)
+        if lvl_container[l] == '' or l==10:
+            break
         if graph[m] != [] and m in marked:
             l += 1
-        for i in range(l,11):
-                lvl_container[i] = []
-        if l > corr_level:
-            break
-    return lvl_container[corr_level]
+    for i in range(l,11):
+        lvl_container[i] = []
+    return lvl_container
 
 '''
 def bfs_old(s):
