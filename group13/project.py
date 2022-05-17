@@ -1,4 +1,3 @@
-import time
 try: # this is for main.py
     from group13.utils import bfs, bfs2, bfs_adhoc, Graph2
 except: # this is for project.py (for testing)
@@ -7,7 +6,6 @@ except: # this is for project.py (for testing)
 global new_container
 global adjacency_list
 global small_container
-starttime = time.time()
 new_container = {}
 adjacency_list = {} 
 small_container = {}
@@ -106,5 +104,3 @@ if __name__ == "__main__":
 
     ncc = num_connected_components()
     print(ncc)
-    endtime = time.time()
-    print(endtime-starttime)
