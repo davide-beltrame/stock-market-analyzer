@@ -58,7 +58,10 @@ def bfs(graph, node, lvl):
     l = 1
     x = 0
     while l <= lvl:
-        m = queue.pop(0) 
+        try:
+            m = queue.pop(0)
+        except:
+            return []
         lvl_container[l] = []
         for neighbour in graph[m]:
             if neighbour not in visited:
