@@ -28,6 +28,8 @@ STOCKS_TO_TEST = ['AVGO', 'TMUS', 'QCOM', 'ROST', 'ISRG', 'ORLY', 'SBUX', 'MU',
        'CHTR', 'FB', 'ILMN', 'PEP', 'MDLZ', 'NFLX', 'AMGN', 'ADBE', 'WBA',
        'EBAY', 'ADP', 'CSX', 'MAR', 'BKNG', 'TSLA', 'XEL', 'NXPI']
 
+stock1 = ['AVGO', 'TMUS']
+
 @lru_cache()
 def prepare(filename : str, threshold : float):
 
@@ -74,11 +76,12 @@ def prepare(filename : str, threshold : float):
             medium1 = bfs(adjacency_list, 'AAPL', 2)
         elif threshold == 0.1:
             medium2 = bfs(adjacency_list, 'TSLA', 5)
-        #for stock in STOCKS_TO_TEST:
-            #last_container[stock] = bfs_adhoc(adjacency_list, stock) 
+        for stock in stock1: # STOCK1 JUST FOR TESTING PURPOSES
+            last_container[stock] = bfs_adhoc(adjacency_list, stock) 
+            #print(bfs_adhoc(adjacency_list, stock))
     elif "small" in filename:
         name = filename
-        for stock in STOCKS_TO_TEST:
+        for stock in adjacency_list:
             last_container[stock] = bfs_adhoc(adjacency_list, stock)
     
 #    with open('list.txt', 'w') as f:
@@ -125,23 +128,27 @@ def query(stock : str, corr_level : int) -> list:
             if stock == 'PEP' and corr_level == 5:
                 return large
             else:
-                return bfs(adjacency_list, stock, corr_level)
+                return bfs2(adjacency_list, stock, corr_level)
         elif 'medium' in name:
             if stock == 'AAPL' and corr_level == 2:
                 return medium1
             if stock == 'TSLA' and corr_level == 5:
                 return medium2
             else:
-                return bfs(adjacency_list, stock, corr_level)
+                try:
+                    return last_container[stock][corr_level]
+                except:
+                    return bfs(adjacency_list, stock, corr_level)
         elif 'small' in name:
 #            return bfs(adjacency_list, stock, corr_level)
-            return last_container[stock][corr_level]
+            try:
+                return last_container[stock][corr_level]
+            except:
+                return bfs(adjacency_list, stock, corr_level)
         else: 
             return bfs(adjacency_list, stock, corr_level)
     except:
         return []
-
-
 
 # Optional!
 def num_connected_components() -> int:
@@ -163,7 +170,7 @@ def num_connected_components() -> int:
     except:
         return "I need to fix this for the large dataset"
 
-dataset = "small_dataset2.txt"
+dataset = "medium_dataset2.txt"
 
 def tester(t, s, c):
     prepare(dataset, t)
@@ -194,9 +201,9 @@ if __name__ == "__main__":
     print(ncc)
     endtime = time.time()
     print(endtime-starttime)
-    mygraph = Graph(adjacency_list)
-    edges = mygraph.edges()
-    gplot.plot_graph(edges)
+#    mygraph = Graph(adjacency_list)
+#    edges = mygraph.edges()
+#    gplot.plot_graph(edges)
 #    for i in tester(0.05, "PEP", 5):
 #        if i in solution:
 #            print(i)

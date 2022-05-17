@@ -22,31 +22,31 @@ import queue
 
 #adjacency_list = {'AMAT': ['GILD'], 'AVGO': ['ORLY', 'KHC', 'EBAY', 'CSX', 'BKNG'], 'TMUS': ['QCOM', 'COST', 'REGN', 'ADBE'], 'QCOM': ['TMUS', 'COST', 'GILD', 'REGN', 'ADBE'], 'ROST': ['SBUX', 'PYPL', 'TXN'], 'ISRG': ['SBUX', 'CMCSA', 'ADI', 'INTU', 'ILMN', 'ADP', 'NXPI'], 'ORLY': ['AVGO', 'KHC', 'WBA', 'EBAY', 'CSX', 'BKNG'], 'SBUX': ['ROST', 'ISRG', 'PYPL', 'TXN', 'INTU', 'ILMN', 'NXPI'], 'MU': ['GOOGL', 'INTC', 'FB', 'PEP', 'MDLZ', 'NFLX'], 'LRCX': ['AAPL', 'VRTX', 'MSFT', 'CHTR'], 'CMCSA': ['ISRG', 'ADI', 'INTU', 'ILMN', 'ADP', 'NXPI'], 'GOOGL': ['MU', 'INTC', 'FB', 'PEP', 'MDLZ'], 'ATVI': ['VRTX', 'CHTR'], 'COST': ['TMUS', 'QCOM', 'GILD', 'REGN', 'ADBE'], 'CSCO': ['WBA', 'CSX'], 'NVDA': [], 'AMZN': ['FISV', 'AMGN', 'XEL'], 'PYPL': ['ROST', 'SBUX', 'TXN', 'NXPI'], 'TXN': ['ROST', 'SBUX', 'PYPL', 'NXPI'], 'INTC': ['MU', 'GOOGL', 'FB', 'PEP', 'MDLZ'], 'GILD': ['AMAT', 'QCOM', 'COST', 'ADBE'], 'AAPL': ['LRCX', 'BIIB', 'MSFT'], 'CTSH': ['MAR'], 'VRTX': ['LRCX', 'ATVI', 'CHTR'], 'REGN': ['TMUS', 'QCOM', 'COST', 'ADBE'], 'ADI': ['ISRG', 'CMCSA', 'INTU', 'ILMN', 'ADP'], 'FISV': ['AMZN', 'AMGN', 'XEL'], 'BIIB': ['AAPL', 'MSFT'], 'KHC': ['AVGO', 'ORLY', 'EBAY', 'BKNG'], 'MSFT': ['LRCX', 'AAPL', 'BIIB'], 'AMD': [], 'INTU': ['ISRG', 'SBUX', 'CMCSA', 'ADI', 'ILMN', 'ADP', 'NXPI'], 'CHTR': ['LRCX', 'ATVI', 'VRTX'], 'FB': ['MU', 'GOOGL', 'INTC', 'PEP', 'MDLZ', 'NFLX'], 'ILMN': ['ISRG', 'SBUX', 'CMCSA', 'ADI', 'INTU', 'ADP', 'NXPI'], 'PEP': ['MU', 'GOOGL', 'INTC', 'FB', 'MDLZ'], 'MDLZ': ['MU', 'GOOGL', 'INTC', 'FB', 'PEP', 'NFLX'], 'NFLX': ['MU', 'FB', 'MDLZ', 'AMGN'], 'AMGN': ['AMZN', 'FISV', 'NFLX', 'XEL'], 'ADBE': ['TMUS', 'QCOM', 'COST', 'GILD', 'REGN'], 'WBA': ['ORLY', 'CSCO', 'CSX', 'BKNG'], 'EBAY': ['AVGO', 'ORLY', 'KHC', 'BKNG'], 'ADP': ['ISRG', 'CMCSA', 'ADI', 'INTU', 'ILMN', 'NXPI'], 'CSX': ['AVGO', 'ORLY', 'CSCO', 'WBA', 'BKNG'], 'MAR': ['CTSH'], 'BKNG': ['AVGO', 'ORLY', 'KHC', 'WBA', 'EBAY', 'CSX'], 'TSLA': [], 'XEL': ['AMZN', 'FISV', 'AMGN'], 'NXPI': ['ISRG', 'SBUX', 'CMCSA', 'PYPL', 'TXN', 'INTU', 'ILMN', 'ADP']}
 
-def bfs_adhoc(graph, node): #function for BFS
-#    print('BFS of adjacency list with root: {}'.format(node))
+def bfs_adhoc(graph, node):
     queue = []     #Initialize a queue
     visited = []
     lvl_container = {}
-    marked = []
     visited.append(node)
     queue.append(node)
     l = 1
-    while queue:      # Creating loop to visit each node
-        m = queue.pop(0) 
+    x = 0
+    while l <= 10:
+        try:
+            m = queue.pop(0)
+        except:
+            return lvl_container 
         lvl_container[l] = []
         for neighbour in graph[m]:
             if neighbour not in visited:
-                if m not in marked:
-                    marked.append(m)
 #                print(str(m)+' has neighbour: '+str(neighbour)+' (level: {}) '.format(l))
                 lvl_container[l].append(neighbour)
                 visited.append(neighbour)
                 queue.append(neighbour)
+                x += 1
         lvl_container[l] = qsort(lvl_container[l])
-        if graph[m] != [] and m in marked:
+        if x != 0:
             l += 1
-        if l > 10:
-            break
+            x = 0
     return lvl_container
 
 def bfs(graph, node, lvl):
