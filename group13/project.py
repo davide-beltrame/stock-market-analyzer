@@ -76,7 +76,7 @@ def prepare(filename : str, threshold : float):
             medium1 = bfs(adjacency_list, 'AAPL', 2)
         elif threshold == 0.1:
             medium2 = bfs(adjacency_list, 'TSLA', 5)
-        for stock in stock1: # STOCK1 JUST FOR TESTING PURPOSES
+        for stock in STOCKS_TO_TEST: # STOCK1 JUST FOR TESTING PURPOSES
             last_container[stock] = bfs_adhoc(adjacency_list, stock) 
             #print(bfs_adhoc(adjacency_list, stock))
     elif "small" in filename:
