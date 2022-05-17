@@ -6,7 +6,7 @@ from private import proutils
 
 ### CHANGE HERE ###
 group_id = 13
-OPTIONAL_TEST = False
+OPTIONAL_TEST = True
 
 
 test_counter = 0

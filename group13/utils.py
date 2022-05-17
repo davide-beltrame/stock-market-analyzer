@@ -49,32 +49,97 @@ def bfs_adhoc(graph, node): #function for BFS
             break
     return lvl_container
 
-def bfs(graph, node, lvl): #function for BFS
-#    print('BFS of adjacency list with root: {}'.format(node))
+def bfs(graph, node, lvl):
     queue = []     #Initialize a queue
     visited = []
     lvl_container = {}
-    marked = []
     visited.append(node)
     queue.append(node)
     l = 1
-    while queue:      # Creating loop to visit each node
+    x = 0
+    while l <= lvl:
         m = queue.pop(0) 
         lvl_container[l] = []
         for neighbour in graph[m]:
             if neighbour not in visited:
-                if m not in marked:
-                    marked.append(m)
 #                print(str(m)+' has neighbour: '+str(neighbour)+' (level: {}) '.format(l))
                 lvl_container[l].append(neighbour)
                 visited.append(neighbour)
                 queue.append(neighbour)
-        lvl_container[l] = qsort(lvl_container[l])
-        if graph[m] != [] and m in marked:
+                x += 1
+        if x != 0:
             l += 1
-        if l > lvl:
-            break
-    return lvl_container[lvl]
+            x = 0
+    return qsort(lvl_container[lvl])
+
+def bfs2(graph, node, lvl):
+    queue = [node]
+    visited = [node]
+    lvl_container = [node]
+    temporary_lvl_container= []
+    counter = 0
+    while counter<lvl:
+        if len(queue)==0:
+            return 
+        lvl_container.pop(0)
+        a=queue.pop(0)
+        for i in graph[a]:
+            if i not in visited:
+                visited.append(i)
+                queue.append(i)
+                temporary_lvl_container.append(i)
+        if len(lvl_container) == 0:
+            lvl_container = temporary_lvl_container
+            temporary_lvl_container= []
+            counter+=1
+            
+    return qsort(lvl_container)
+
+class Graph2:
+     
+    def __init__(self, adj):
+ 
+        # No. of vertices
+ 
+        # Pointer to an array containing
+        # adjacency lists
+        self.adj = adj
+ 
+    # Function to return the number of
+    # connected components in an undirected graph
+    def NumberOfconnectedComponents(self):
+        
+        visited = {}
+        # Mark all the vertices as not visited
+        for i in self.adj.keys():
+            visited[i] = False
+         
+        # To store the number of connected
+        # components
+        count = 0
+         
+        for v in self.adj.keys():
+            if (visited[v] == False):
+                self.DFSUtil(v, visited)
+                count += 1
+                 
+        return count
+         
+    def DFSUtil(self, v, visited):
+ 
+        # Mark the current node as visited
+        visited[v] = True
+ 
+        # Recur for all the vertices
+        # adjacent to this vertex
+        for i in self.adj[v]:
+            if (not visited[i]):
+                self.DFSUtil(i, visited)
+    # Add an undirected edge
+#    def addEdge(self, v, w):
+         
+#        self.adj[v].append(w)
+#        self.adj[w].append(v)
 
 #if __name__ == '__main__':
 #    print(bfs(adjacency_list, 'GOOGL', 2))
