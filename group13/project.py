@@ -13,8 +13,7 @@ small_container = {}
 def prepare(filename : str, threshold : float):
 
     global name
-    name = ''
-
+    name = filename
     stock_container = {}
     
     with open(filename,'r') as f:
@@ -42,21 +41,14 @@ def prepare(filename : str, threshold : float):
                 if i != stock: # non self-edges
                     adjacency_list[stock].append(i)
 
-    if "large" in filename:
-        name = filename
-    elif "medium" in filename:
-        name = filename
-    elif "small" in filename:
-        name = filename
+    if "small" in filename:
         for stock in adjacency_list:
             small_container[stock] = bfs_adhoc(adjacency_list, stock)
 
 def query(stock : str, corr_level : int) -> list:
 
     try:
-        if 'large' in name:
-            return bfs2(adjacency_list, stock, corr_level)
-        elif 'medium' in name:
+        if 'medium' in name:
             return bfs(adjacency_list, stock, corr_level)
         elif 'small' in name:
             try:
@@ -64,7 +56,7 @@ def query(stock : str, corr_level : int) -> list:
             except:
                 return bfs(adjacency_list, stock, corr_level)
         else: 
-            return bfs(adjacency_list, stock, corr_level)
+            return bfs2(adjacency_list, stock, corr_level)
     except:
         return []
 
