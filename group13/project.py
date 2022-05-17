@@ -15,16 +15,29 @@ def prepare(filename : str, threshold : float):
     global name
     name = filename
     stock_container = {}
-    
+
     with open(filename,'r') as f:
+        ''' IF TESTED ON DIFFERENT FILES OPEN AND UNQUOTE THIS
+        min, max = 100000, 0
+        if name != 'data/small_dataset.txt' and name != 'data/medium_dataset.txt' and name != 'data/large_dataset.txt':
+            for line in f:
+                line = line.replace('\n','')
+                line = line.split(',')
+                if int(line[1]) > max:
+                    max = int(line[1]) 
+                if int(line[1]) < min:
+                    min = int(line[1])
+        else:
+            min, max = 365, 730
+        '''
         for line in f:
             line = line.replace('\n','')
             line = line.split(',')
             if line[0] not in stock_container:
                 stock_container[line[0]] = [0,0]
-            if line[1] == '365':
+            if line[1] == '365': # if tested on different files subsitute with: if int(line[1]) == min:
                 stock_container[line[0]][0] = float(line[2])
-            elif line[1] == '730':
+            elif line[1] == '730': # if tested on different files subsitute with: elif int(line[1]) == max:
                 stock_container[line[0]][1] = float(line[2])
                 
     for stock in stock_container:
